@@ -1,0 +1,203 @@
+<exp> ::= let <listofvar> in <exp> end
+<exp> ::= if <exp> then <exp> else <exp>
+
+single expression inside the "in" of a let
+lexically scoped with most current context
+    let vals in expr end;
+
+let val x=1 val y=2 in x+y end;
+
+------------
+
+let
+    val x=1
+    val y =2
+in
+    x+y
+end;
+
+-------------
+
+let
+    fun doubleit x = x*2
+    val favnum = 73
+in
+    doubleit favnum
+end;
+
+-----------
+
+let
+    val x = 2
+    val y = 3
+in
+    let
+        val x = 5
+        val z = 7
+    in
+        x+y+z
+    end
+end;
+
+this one is 15
+
+--------------
+
+
+let
+    val x = 2
+    val y = 3
+in
+    let
+        val x = 5
+        val z = 7
+    in
+        x+y+z
+    end + x
+end;
+
+this one is 17
+
+----------------
+
+merge sort
+
+split, sort, merge
+
+fun unmix nil = (nil,nil)
+|   unmix [x] = ([x],nil)
+|   unmix (x::y::tail) = unmix tail
+        let
+            val (xtail,ytail) = unmix tail
+        in
+            (x::xtail,y::ytail)
+        end;
+
+fun merge (nil,l) = l
+|   merge (l,nil) = l
+|   merge (x::xs,y::ys) =
+        if x<y then x::(merge (xs,y::ys))
+               else y::(merge (x::xs,ys));
+
+fun msort nil = nil
+|   msort [x] = [x]
+|   msort l =
+        let
+            val (a,b) = unmix l
+        in
+            merge (msort a, msort b)
+        end;
+
+--------------
+
+print takes string arg and returns a unit type
+
+print "one\n"
+
+fun pow (x,0) = 1
+|   pow (x,i) =
+        let
+            val temp = print "haha\n"
+        in
+            x*pow(x,i-1)
+        end;
+
+fun pow (x,0) = 1
+|   pow (x,i) =
+        let
+            val temp = print "haha\n"
+            val half = pow(x,i div 2)
+        in
+            if i mod 2 = 0 then half*half
+            else x*half*half
+        end;
+
+---------------
+
+lambdas
+
+fn x => x*x;
+
+fun sqrit x = x*x;
+
+val double it = fn x => x*x;
+
+(fn x => x*x) 3;
+
+(fn (x,y) => x*x+y*y) (3,4);
+
+fun f1 (a,b) = a*b;
+
+fun f2 a = fn b => a*b;
+
+function which returns a function of the int * b
+
+(f2 3) 5;
+
+this is 15
+basically (f2 3) 5 becomes (3*b) 5 becomes (3*5) becomes 15
+
+function application is left associative
+
+can say
+f2 3 5;
+
+currying and partial evaluation are different
+currying takes a function with multiple args and only instantiates some, returning a function which will take the rest
+ie a general sort which takes a comparator and a list,
+give it a comparator (ie ascending or descending)  and it returns a sort function which takes just a list
+
+fun f2 a b = a*b;
+
+f2 7
+returns it int -> int
+
+it 4
+returns 28
+
+
+fun cat2 s1 s2 = s1 ^ s2;
+
+val prependhello s = cat2 "hello";
+
+val appendthere = fn a => cat2 a " there";
+
+--------
+
+higher order functions...
+
+function orders:
+a fun that takes no args and returns no funs is order 0
+a funs order is one greater than the max order of any fn it takes as input or returns
+
+ex:
+
+- map;
+val it = fn : ('a -> 'b) -> 'a list -> 'b list
+
+- foldl;
+val it = fn : ('a * 'b -> 'b) -> 'b -> 'a list -> 'b
+
+- foldr;
+val it = fn : ('a * 'b -> 'b) -> 'b -> 'a list -> 'b
+
+
+folds are a curried function which
+    arg1 is a binary infix function which takes pairs of (`a * `b -> `b)
+    arg2 is type `a as arg2,
+    arg3 is type `b as arg2. returns type `b
+
+
+map goes from list of size n type `a and returns list of size n of type `b
+
+map (op +) [(2,4),(5,~1),(0,4)]
+
+foldr (op +) 0 [1,2,3]
+
+foldl (op +) 0 [1,2,3]
+
+
+
+
+
+

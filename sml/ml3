@@ -1,0 +1,162 @@
+polynomial evaluator
+coeffs are list of nums x is a num
+
+(*
+
+recursive
+
+*)
+
+fun evalpoly [] _ = 0
+|   evalpoly (c::cs) x = c + x*(evalpoly cs x);
+
+
+(*
+
+foldl
+
+coeffs = [4,1,2]
+x = 10
+
+4,(0,1) -> (4,10)
+1,(4,10) -> (14,100)
+2,(14,100) -> (214,1000)
+
+accumulate the sum and the power
+
+*)
+
+fun evalpoly2 coeffs x =
+    let
+        fun accsumandpow (coeff, (cursum, curpow)) = (cursum + coeff*curpow, curpow*x)
+        val (sum,power) = foldl accsumandpow (0,1) coeffs
+    in
+        sum
+    end;
+
+fun evalpoly3 coeffs x =
+    #1 ( foldl
+            (fn (coeff, (cursum, curpow)) =>
+                (cursum + coeff*curpow, curpow*x))
+            (0,1) coeffs);
+
+
+-------------
+
+datatypes in ML
+
+color type constructor (in this case has no args)
+red|blue|green are data constructors which can take args
+
+datatype color = red|green|blue;
+
+fun isred x = (x=red);
+
+fun tostring blue = "blue"
+|   tostring red = "red"
+|   tostring green = "green"
+
+
+datatype number = whole of int | decimal of real | NaN;
+
+whole 2;
+
+whole is fn = int -> number
+decimal is fn = real -> number
+
+pattern matching
+
+val a  = (4,5);
+val (b,c) = a;
+
+val (whole y) = x;
+
+
+fun num2str (whole x) = Int.toString x
+|   num2str (decimal x) = Real.toString x
+|   num2str NaN = "Not a Number"
+
+
+recursive datatypes
+
+datatype intlist = EmptyIntList | IntCons of int * intlist;
+
+IntCons (4,EmptyIntList);
+
+IntCons ( ~2, IntCons (4,EmptyIntList));
+
+
+recursive binary search tree
+
+datatype inttree = EmptyTree | Node of int * inttree * inttree;
+
+Node (2,EmptyTree,EmptyTree)
+
+Node ( 4, Node (2,EmptyTree,EmptyTree), EmptyTree)
+
+fun addtotree EmptyTree v = Node(v,EmptyTree,EmptyTree)
+|   addtotree (Node(rootval,left,right)) v =
+        if v < rootval then Node(rootval, (addtotree left v), right)
+                       else Node(rootval, left, (addtotree right v));
+
+fn : inttree -> int -> inttree
+
+addtotree EmptyTree 4;
+addtotree it 2;
+addtotree it 1;
+addtotree it 6;
+addtotree it 2;
+
+
+note: type constructors are postfix
+
+now general polymorphic type with a comparison operator
+
+datatype 'a tree = EmptyTree | Node of 'a * 'a tree * 'a tree ;
+
+fun addtotree cmp EmptyTree v = Node(v,EmptyTree,EmptyTree)
+|   addtotree cmp (Node(rootval,left,right)) v =
+        if cmp(v,rootval) then Node(rootval, (addtotree cmp left v), right)
+                          else Node(rootval, left, (addtotree cmp right v));
+
+
+fun isintree _ EmptyTree _ = false
+|   isintree cmp (Node(rootval,left,right)) v =
+        if cmp(rootval,v) then isintree cmp right v
+                          else if cmp(v,rootval) then isintree cmp left v
+                          else true;
+
+
+
+fun printtree _ EmptyTree = ""
+|   printtree stem (Node(v,left,right)) =
+let
+    val newstem = stem ^ "    "
+    val _ = printtree newstem left
+    val _ = print (stem^(Int.toString v)^"\n")
+in
+    val _ = printtree newstem right
+end;
+
+
+val addtoint = addtotree (op <);
+
+
+things to know
+
+
+sequential statements
+records
+mutable arrays
+references
+exceptions
+api
+compiler
+
+
+
+printing stuff
+
+Control.Print.printDepth := 100;
+
+Control.Print.printLength := 100;
