@@ -1,0 +1,24 @@
+Combinators
+
+--------------------
+
+* composition =
+
+    \f g x -> f (g x)
+
+    (.) :: (b -> c) -> (a -> b) -> a -> c
+
+* blackbird = (a pipe with 2 inputs)
+
+    \f g x y -> f (g x y)
+
+    blackbird f g = (f .) . g
+    blackbird :: (b -> c) -> (a -> a1 -> b) -> a -> a1 -> c
+
+    (...) = (.) . (.)
+    (...) :: (b -> c) -> (a -> a1 -> b) -> a -> a1 -> c
+
+* psi = (`on` in haskell)
+
+    (on) :: (b -> b -> c) -> (a -> b) -> a -> a -> c
+

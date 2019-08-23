@@ -1,0 +1,32 @@
+Haskell notes:
+
+Starting from GHC 8.0.1, top-level bindings are supported in GHCi,
+In GHCi 7.x or below, you need a let to define things in it.
+
+do notation
+
+main = do
+        ... code ...
+
+
+printing = putStrLn
+
+types = :type
+
+type to str = show
+
+[] list
+() tuple
+
+list prepend = :
+(:) :: a -> [a] -> [a]
+
+list cat = ++
+(++) :: [a] -> [a] -> [a]
+
+list comprehensions
+
+powers = [ 2^x | <- x [1,2,3,4] ]
+
+map, foldl, foldr, filter, zip, zipWith, etc...
+

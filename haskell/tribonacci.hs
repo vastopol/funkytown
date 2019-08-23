@@ -1,5 +1,4 @@
--- Problem Set 1, Question 4
--- Tribonacci
+-- Tribonacci Sequence
 
 main :: IO()
 main = do
