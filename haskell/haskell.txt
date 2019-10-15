@@ -1,5 +1,7 @@
 Haskell notes:
 
+cp *.hs ..; rm *; cp ../*.hs .; rm ../*.hs
+
 Starting from GHC 8.0.1, top-level bindings are supported in GHCi,
 In GHCi 7.x or below, you need a let to define things in it.
 
